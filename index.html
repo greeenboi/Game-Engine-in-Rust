@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Engine</title>
+</head>
+<body style="margin:0; overflow-y: hidden;overflow-x: hidden;">
+    <canvas id="my_canvas" style="width:100vw; height: 100vh;"></canvas>
+    <script>
+        let canvas = document.getElementById("my_canvas");
+        let gl = canvas.getContext("webgl");
+        let imports = {
+            env: {
+                js_clear_screen_to_color: function (red, green, blue, alpha) {
+                    gl.clearColor(red, green, blue, alpha);
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+                }
+            }
+        };
+        WebAssembly.instantiateStreaming(fetch('target/wasm32-unknown-unknown/debug/examples/game.wasm'), imports).then(function (result) {
+        result.instance.exports.main();
+
+        document.onkeydown = function (event) {
+            result.instance.exports.key_pressed();
+        };
+    });
+    </script>
+    </body>
+</html>
