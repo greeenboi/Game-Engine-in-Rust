@@ -21,7 +21,26 @@
         result.instance.exports.main();
 
         document.onkeydown = function (event) {
-            result.instance.exports.key_pressed();
+            let code = 0;
+            switch (event.code) {
+                case "ArrowLeft":
+                    code = 1;
+                    break;
+                case "ArrowRight":
+                    code = 2;
+                    break;
+                case "ArrowUp":
+                    code = 3;
+                    break;
+                case "ArrowDown":
+                    code = 4;
+                    break;
+                case "Space":
+                    code = 5;
+                    break;
+            }
+
+            result.instance.exports.key_pressed(code);
         };
     });
     </script>

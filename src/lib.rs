@@ -10,8 +10,17 @@ extern "C" {
     fn js_clear_screen_to_color(red: f32, green: f32, blue: f32, alpha: f32);
 }
 #[no_mangle]
-pub extern "C" fn key_pressed() {
-    EVENT_HANDLER.with(|event_handler| (event_handler.borrow_mut())())
+pub extern "C" fn key_pressed(value: usize) {
+    let key = match value {
+        1 => Key::Left,
+        2 => Key::Right,
+        3 => Key::Up,
+        4 => Key::Down,
+        5 => Key::Space,
+        _ => return,
+    };
+
+    EVENT_HANDLER.with(|event_handler| (event_handler.borrow_mut())(key))
 }
 
 pub fn clear_screen_to_color(red: f32, green: f32, blue: f32, alpha: f32) {
@@ -25,6 +34,7 @@ thread_local! {
 }
 
 pub fn set_event_handler(function: impl FnMut(Key) + 'static) {
+/*...*/
     EVENT_HANDLER.with(|event_handler| {
         *event_handler.borrow_mut() = Box::new(function);
     });
